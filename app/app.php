@@ -1,17 +1,59 @@
 <?php
     require_once __DIR__."/../vendor/autoload.php";
     require_once __DIR__."/../src/Rectangle.php";
+    require_once __DIR__."/../src/Cd.php";
 
     $app = new Silex\Application();
 
     $app['debug'] = true;
 
+    $app->get("/cd_selection", function() {
+      $first_cd = new CD("Hot Fuss", "The Killers", "images/the-killers.jpg", 10.99);
+      $second_cd = new CD("Three Cheers for the Sweet Revenge", "My Chemical Romance", "images/three-cheers.jpg", 10.99);
+      $third_cd = new CD("The Suburbs", "Arcade Fire", "images/arcade-fire.jpg", 10.99);
+      $fourth_cd = new CD("You Can't Stop the Bum Rush", "Len", "images/len.jpg", 49.99);
+      $cds = array($first_cd, $second_cd, $third_cd, $fourth_cd);
+
+      $output = "";
+      foreach ($cds as $album) {
+          $output = $output . "<div class='row'>
+              <div class='col-md-6'>
+                  <img src=" . $album->getCoverArt() . ">
+              </div>
+              <div class='col-md-6'>
+                  <p>" . $album->getTitle() . "</p>
+                  <p>By " . $album->getArtist() . "</p>
+                  <p>$" . $album->getPrice() . "</p>
+              </div>
+          </div>
+    ";
+}
+return $output;
+
+
+    });
+
     $app->get("/", function() {
-      return "Hello world! Welcome to Tam's area calculator! Click <a href='/new_rectangle'>here</a> to get started!";
+      return "
+      <!DOCTYPE html>
+      <head>
+          <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
+          <title>Make a rectangle!</title>
+      </head>
+      <body>
+        <div class='container'>
+          <p>Hello world! Welcome to Tam's area calculator! Click <a href='/new_rectangle'>here</a> to get find an area of a polygon!</p>
+        </div>
+        <div class='container'>
+          <p>We also have a CD colection! Click <a href='/cd_selection'>here</a> to browse our selection!</p>
+        </div>
+      </body>
+      </html>
+      ";
     });
 
     $app->get("/new_rectangle", function() {
-        return  "
+        return "
         <!DOCTYPE html>
         <html>
         <head>
